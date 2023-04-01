@@ -40,7 +40,7 @@ test("Test pagination metadata response from fetch all in product controller", a
       metadata: {
         page: 1,
         limit: 30,
-        totalRecords: 8,
+        totalRecords: 7,
         totalPages: 1,
       },
     })
@@ -59,22 +59,22 @@ test("Test data response from fetch product by ID controller", async () => {
   );
 });
 
-// test("Test response from add product controller", async () => {
-//   const newProduct = {
-//     id: 888,
-//     type: "savings",
-//     name: "45 Day Notice Account",
-//   };
-//   const response = await request(app).post("/product").send(newProduct);
-//   expect(response.status).toBe(201);
-//   expect(response.body).toEqual(
-//     expect.objectContaining({
-//       message: "New product has been added",
-//     })
-//   );
-// });
-
 test("Test response from add product controller", async () => {
+  const newProduct = {
+    id: 888,
+    type: "savings",
+    name: "45 Day Notice Account",
+  };
+  const response = await request(app).post("/product").send(newProduct);
+  expect(response.status).toBe(201);
+  expect(response.body).toEqual(
+    expect.objectContaining({
+      message: "New product has been added",
+    })
+  );
+});
+
+test("Test response from alter product controller", async () => {
   const newProduct = {
     type: "saving",
   };
@@ -90,12 +90,28 @@ test("Test response from add product controller", async () => {
   );
 });
 
-// test("Test response from delete product by ID controller", async () => {
-//   const response = await request(app).delete("/product").query({ id: 888 });
-//   expect(response.status).toBe(202);
-//   expect(response.body).toEqual(
-//     expect.objectContaining({
-//       message: "product has been deleted from database",
-//     })
-//   );
-// });
+test("Test response from delete product by ID controller", async () => {
+  const response = await request(app).delete("/product").query({ id: 888 });
+  expect(response.status).toBe(202);
+  expect(response.body).toEqual(
+    expect.objectContaining({
+      message: "product has been deleted from database",
+    })
+  );
+});
+
+test("Test response from select application product details controller", async () => {
+  const response = await request(app)
+    .get("/application/product")
+    .query({ id: 1052768 });
+  expect(response.status).toBe(200);
+  expect(response.body).toEqual({
+    id: 1052768,
+    type: "flexi_credit",
+    amount_requested: 58600,
+    status: "declined",
+    product_id: 1435004,
+    product_type: "flexi_credit",
+    name: "Flexible Credit",
+  });
+});

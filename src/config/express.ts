@@ -18,6 +18,7 @@ import {
   getAllFarmers,
   getAllFarms,
   getAllProducts,
+  getApplicationProductDetails,
   getSelectedApplication,
   getSelectedFarm,
   getSelectedFarmer,
@@ -44,6 +45,7 @@ const createServer = (): express.Application => {
   app.post("/application", addApplication);
   app.delete("/application", deleteApplication);
   app.put("/application", alterApplication);
+  app.get("/application/product", getApplicationProductDetails);
 
   app.get("/farms", getAllFarms);
   app.get("/farm", getSelectedFarm);
