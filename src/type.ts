@@ -33,3 +33,5 @@ export type Product = {
 export type RowCount = {
   count: number;
 };
+
+export type FormValues = { [key: string]: string | number };

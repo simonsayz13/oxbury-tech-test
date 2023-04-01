@@ -6,6 +6,7 @@ import {
   addFarm,
   addFarmer,
   addProduct,
+  alterProduct,
   deleteApplication,
   deleteFarm,
   deleteFarmer,
@@ -33,6 +34,7 @@ const createServer = (): express.Application => {
   app.get("/product", getSelectedProduct);
   app.post("/product", addProduct);
   app.delete("/product", deleteProduct);
+  app.put("/product", alterProduct);
 
   app.get("/applications", getAllApplications);
   app.get("/application", getSelectedApplication);
