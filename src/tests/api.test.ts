@@ -76,7 +76,7 @@ test("Test data response from fetch product by ID controller", async () => {
 
 test("Test response from add product controller", async () => {
   const newProduct = {
-    type: "savings",
+    type: "saving",
   };
   const response = await request(app)
     .put("/product")
