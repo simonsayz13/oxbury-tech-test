@@ -2,6 +2,9 @@ import express from "express";
 import cors from "cors";
 import { routeController } from "../controllers/test-controller";
 import {
+  addApplication,
+  addFarm,
+  addFarmer,
   addProduct,
   getAllApplications,
   getAllFarmers,
@@ -28,12 +31,15 @@ const createServer = (): express.Application => {
 
   app.get("/applications", getAllApplications);
   app.get("/application", getSelectedApplication);
+  app.post("/application", addApplication);
 
   app.get("/farms", getAllFarms);
   app.get("/farm", getSelectedFarm);
+  app.post("/farm", addFarm);
 
   app.get("/farmers", getAllFarmers);
   app.get("/farmer", getSelectedFarmer);
+  app.post("/farmer", addFarmer);
 
   return app;
 };

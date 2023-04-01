@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import { getAllData, getDataByID } from "../services/data-access";
+import { addData, getAllData, getDataByID } from "../services/data-access";
+import { Farmer } from "../type";
 
 const TABLE_NAME: string = "farmer";
 
@@ -13,4 +14,9 @@ export const getAllFarmers = (req: Request, res: Response): void => {
 export const getSelectedFarmer = (req: Request, res: Response): void => {
   const id: number = Number(req.query.id);
   getDataByID(id, TABLE_NAME, res);
+};
+
+export const addFarmer = (req: Request, res: Response): void => {
+  const newFarmer: Farmer = req.body;
+  addData(newFarmer, res, TABLE_NAME);
 };
