@@ -58,3 +58,26 @@ export const getDataByID = (id: Number, table: string, res: Response): void => {
     }
   );
 };
+
+export const addData = (
+  newData: Application | Product | Farm | Farmer,
+  res: Response,
+  table: string
+): void => {
+  let insertSQL: string = `INSERT INTO ${table} (`;
+  let sqlValues: string = `VALUES (`;
+  let queryParams: Array<string | number> = [];
+  for (const [key, value] of Object.entries(newData)) {
+    insertSQL += `${key},`;
+    sqlValues += `?,`;
+    queryParams.push(value);
+  }
+  insertSQL = insertSQL.slice(0, -1) + `) ` + sqlValues.slice(0, -1) + `)`;
+  db.run(insertSQL, queryParams, (err: Error) => {
+    if (err) {
+      res.status(404).send({ error: err.message });
+    } else {
+      res.status(201).send({ message: `New ${table} has been added` });
+    }
+  });
+};
