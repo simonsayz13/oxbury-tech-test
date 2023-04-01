@@ -29,3 +29,7 @@ export type Product = {
   type: string;
   name: string;
 };
+
+export type RowCount = {
+  count: number;
+};

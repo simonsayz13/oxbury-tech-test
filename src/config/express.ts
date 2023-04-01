@@ -6,6 +6,7 @@ import {
   getAllFarmers,
   getAllFarms,
   getAllProducts,
+  getSelectedProduct,
 } from "../controllers";
 
 const createServer = (): express.Application => {
@@ -15,7 +16,10 @@ const createServer = (): express.Application => {
   app.use(express.json());
   app.use(cors());
   app.use("/api", routeController);
+
   app.use("/products", getAllProducts);
+  app.use("/product", getSelectedProduct);
+
   app.use("/applications", getAllApplications);
   app.use("/farms", getAllFarms);
   app.use("/farmers", getAllFarmers);
