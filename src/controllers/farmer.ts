@@ -7,6 +7,7 @@ import {
   getDataByID,
 } from "../services/data-access";
 import { Farmer, FormValues } from "../type";
+import { getFarmerFarmData } from "../services/farmer-details";
 
 const TABLE_NAME: string = "farmer";
 
@@ -36,4 +37,9 @@ export const alterFarmer = (req: Request, res: Response): void => {
   const id: number = Number(req.query.id);
   const newFarmerFields: FormValues = req.body;
   alterData(id, res, TABLE_NAME, newFarmerFields);
+};
+
+export const getFarmDetails = (req: Request, res: Response): void => {
+  const id: number = Number(req.query.id);
+  getFarmerFarmData(id, res);
 };

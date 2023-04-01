@@ -133,3 +133,21 @@ test("Test response from select application-farmer details controller", async ()
     phone_number: "7700900276",
   });
 });
+
+test("Test response from select farmer's farm details controller", async () => {
+  const response = await request(app)
+    .get("/farmer/farm")
+    .query({ id: 1215200 });
+  expect(response.status).toBe(200);
+  expect(response.body).toEqual({
+    id: 1215200,
+    name: "Stephen Dozier & Brothers",
+    age: 57,
+    phone_number: "7700900276",
+    farm_id: 1206952,
+    num_cows: 14,
+    num_chickens: 1,
+    num_pigs: 92,
+    acres_farmed: 1700,
+  });
+});

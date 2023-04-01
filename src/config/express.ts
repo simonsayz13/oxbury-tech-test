@@ -20,6 +20,7 @@ import {
   getAllProducts,
   getApplicationFarmerDetails,
   getApplicationProductDetails,
+  getFarmDetails,
   getSelectedApplication,
   getSelectedFarm,
   getSelectedFarmer,
@@ -60,6 +61,7 @@ const createServer = (): express.Application => {
   app.post("/farmer", addFarmer);
   app.delete("/farmer", deleteFarmer);
   app.put("/farmer", alterFarmer);
+  app.get("/farmer/farm", getFarmDetails);
 
   return app;
 };
