@@ -1,5 +1,10 @@
 import { Request, Response } from "express";
-import { addData, getAllData, getDataByID } from "../services/data-access";
+import {
+  addData,
+  deleteData,
+  getAllData,
+  getDataByID,
+} from "../services/data-access";
 import { Application } from "../type";
 
 const TABLE_NAME: string = "application";
@@ -19,4 +24,9 @@ export const getSelectedApplication = (req: Request, res: Response): void => {
 export const addApplication = (req: Request, res: Response): void => {
   const newApplication: Application = req.body;
   addData(newApplication, res, TABLE_NAME);
+};
+
+export const deleteApplication = (req: Request, res: Response): void => {
+  const id: number = Number(req.query.id);
+  deleteData(id, res, TABLE_NAME);
 };
