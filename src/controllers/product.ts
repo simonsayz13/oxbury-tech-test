@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import { getAllData, getDataByID } from "../services/data-access";
+import { addData, getAllData, getDataByID } from "../services/data-access";
+import { Product } from "../type";
 
 const TABLE_NAME: string = "product";
 
@@ -13,4 +14,9 @@ export const getAllProducts = (req: Request, res: Response): void => {
 export const getSelectedProduct = (req: Request, res: Response): void => {
   const id: number = Number(req.query.id);
   getDataByID(id, TABLE_NAME, res);
+};
+
+export const addProduct = (req: Request, res: Response): void => {
+  const newProduct: Product = req.body;
+  addData(newProduct, res, TABLE_NAME);
 };

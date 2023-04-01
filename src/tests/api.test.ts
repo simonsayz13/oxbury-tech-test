@@ -47,7 +47,7 @@ test("Test pagination metadata response from fetch all in product controller", a
   );
 });
 
-test("Test data response from fetch all product by ID controller", async () => {
+test("Test data response from fetch product by ID controller", async () => {
   const response = await request(app).get("/product").query({ id: 1654847 });
   expect(response.status).toBe(200);
   expect(response.body).toEqual(
@@ -55,6 +55,21 @@ test("Test data response from fetch all product by ID controller", async () => {
       id: 1654847,
       type: "savings",
       name: "45 Day Notice Account",
+    })
+  );
+});
+
+test("Test response from add product controller", async () => {
+  const newProduct = {
+    id: 888,
+    type: "savings",
+    name: "45 Day Notice Account",
+  };
+  const response = await request(app).post("/product").send(newProduct);
+  expect(response.status).toBe(201);
+  expect(response.body).toEqual(
+    expect.objectContaining({
+      message: "New product has been added",
     })
   );
 });
