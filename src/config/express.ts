@@ -6,6 +6,9 @@ import {
   getAllFarmers,
   getAllFarms,
   getAllProducts,
+  getSelectedApplication,
+  getSelectedFarm,
+  getSelectedFarmer,
   getSelectedProduct,
 } from "../controllers";
 
@@ -15,14 +18,21 @@ const createServer = (): express.Application => {
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
   app.use(cors());
-  app.use("/api", routeController);
 
-  app.use("/products", getAllProducts);
-  app.use("/product", getSelectedProduct);
+  app.get("/api", routeController);
 
-  app.use("/applications", getAllApplications);
-  app.use("/farms", getAllFarms);
-  app.use("/farmers", getAllFarmers);
+  app.get("/products", getAllProducts);
+  app.get("/product", getSelectedProduct);
+
+  app.get("/applications", getAllApplications);
+  app.get("/application", getSelectedApplication);
+
+  app.get("/farms", getAllFarms);
+  app.get("/farm", getSelectedFarm);
+
+  app.get("/farmers", getAllFarmers);
+  app.get("/farmer", getSelectedFarmer);
+
   return app;
 };
 
