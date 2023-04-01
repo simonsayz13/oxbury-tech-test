@@ -7,7 +7,10 @@ import {
   getDataByID,
 } from "../services/data-access";
 import { Application, FormValues } from "../type";
-import { getApplicationProduct } from "../services/application-details";
+import {
+  getApplicationFarmer,
+  getApplicationProduct,
+} from "../services/application-details";
 
 const TABLE_NAME: string = "application";
 
@@ -45,4 +48,12 @@ export const getApplicationProductDetails = (
 ): void => {
   const id: number = Number(req.query.id);
   getApplicationProduct(id, res);
+};
+
+export const getApplicationFarmerDetails = (
+  req: Request,
+  res: Response
+): void => {
+  const id: number = Number(req.query.id);
+  getApplicationFarmer(id, res);
 };

@@ -100,7 +100,7 @@ test("Test response from delete product by ID controller", async () => {
   );
 });
 
-test("Test response from select application product details controller", async () => {
+test("Test response from select application-product details controller", async () => {
   const response = await request(app)
     .get("/application/product")
     .query({ id: 1052768 });
@@ -113,5 +113,23 @@ test("Test response from select application product details controller", async (
     product_id: 1435004,
     product_type: "flexi_credit",
     name: "Flexible Credit",
+  });
+});
+
+test("Test response from select application-farmer details controller", async () => {
+  const response = await request(app)
+    .get("/application/farmer")
+    .query({ id: 1052768 });
+  expect(response.status).toBe(200);
+  expect(response.body).toEqual({
+    id: 1052768,
+    type: "flexi_credit",
+    amount_requested: 58600,
+    status: "declined",
+    product_id: 1435004,
+    farmer_id: 1215200,
+    name: "Gary Schmidt",
+    age: 57,
+    phone_number: "7700900276",
   });
 });
