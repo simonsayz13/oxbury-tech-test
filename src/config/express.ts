@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-import { routeController } from "../controllers/test-controller";
 import {
   addApplication,
   addFarm,
@@ -27,7 +26,7 @@ import {
   getSelectedProduct,
 } from "../controllers";
 import { rateLimiter } from "../middleware/rate-limiter";
-
+import { apiKeyAuth } from "../middleware/authentication";
 const createServer = (): express.Application => {
   const app = express();
 
@@ -36,34 +35,32 @@ const createServer = (): express.Application => {
   app.use(cors());
   app.use(rateLimiter);
 
-  app.get("/api", routeController);
+  app.get("/products", apiKeyAuth, getAllProducts);
+  app.get("/product", apiKeyAuth, getSelectedProduct);
+  app.post("/product", apiKeyAuth, addProduct);
+  app.delete("/product", apiKeyAuth, deleteProduct);
+  app.put("/product", apiKeyAuth, alterProduct);
 
-  app.get("/products", getAllProducts);
-  app.get("/product", getSelectedProduct);
-  app.post("/product", addProduct);
-  app.delete("/product", deleteProduct);
-  app.put("/product", alterProduct);
+  app.get("/applications", apiKeyAuth, getAllApplications);
+  app.get("/application", apiKeyAuth, getSelectedApplication);
+  app.post("/application", apiKeyAuth, addApplication);
+  app.delete("/application", apiKeyAuth, deleteApplication);
+  app.put("/application", apiKeyAuth, alterApplication);
+  app.get("/application/product", apiKeyAuth, getApplicationProductDetails);
+  app.get("/application/farmer", apiKeyAuth, getApplicationFarmerDetails);
 
-  app.get("/applications", getAllApplications);
-  app.get("/application", getSelectedApplication);
-  app.post("/application", addApplication);
-  app.delete("/application", deleteApplication);
-  app.put("/application", alterApplication);
-  app.get("/application/product", getApplicationProductDetails);
-  app.get("/application/farmer", getApplicationFarmerDetails);
+  app.get("/farms", apiKeyAuth, getAllFarms);
+  app.get("/farm", apiKeyAuth, getSelectedFarm);
+  app.post("/farm", apiKeyAuth, addFarm);
+  app.delete("/farm", apiKeyAuth, deleteFarm);
+  app.put("/farm", apiKeyAuth, alterFarm);
 
-  app.get("/farms", getAllFarms);
-  app.get("/farm", getSelectedFarm);
-  app.post("/farm", addFarm);
-  app.delete("/farm", deleteFarm);
-  app.put("/farm", alterFarm);
-
-  app.get("/farmers", getAllFarmers);
-  app.get("/farmer", getSelectedFarmer);
-  app.post("/farmer", addFarmer);
-  app.delete("/farmer", deleteFarmer);
-  app.put("/farmer", alterFarmer);
-  app.get("/farmer/farm", getFarmDetails);
+  app.get("/farmers", apiKeyAuth, getAllFarmers);
+  app.get("/farmer", apiKeyAuth, getSelectedFarmer);
+  app.post("/farmer", apiKeyAuth, addFarmer);
+  app.delete("/farmer", apiKeyAuth, deleteFarmer);
+  app.put("/farmer", apiKeyAuth, alterFarmer);
+  app.get("/farmer/farm", apiKeyAuth, getFarmDetails);
 
   return app;
 };
