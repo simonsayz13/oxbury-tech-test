@@ -1,6 +1,13 @@
 import { Response } from "express";
 import { db } from "../config/database";
-import { Application, Product, Farm, Farmer, RowCount } from "../type";
+import {
+  Application,
+  Product,
+  Farm,
+  Farmer,
+  RowCount,
+  FormValues,
+} from "../type";
 
 export const getAllData = (
   table: string,
@@ -105,6 +112,49 @@ export const deleteData = (id: number, res: Response, table: string): void => {
             res
               .status(202)
               .send({ message: `${table} has been deleted from database` });
+          }
+        });
+      }
+    }
+  );
+};
+
+export const alterData = (
+  id: number,
+  res: Response,
+  table: string,
+  newDataField: FormValues
+): void => {
+  let selectSQL: string = `SELECT * FROM ${table} WHERE id = ?`;
+  db.get(
+    selectSQL,
+    [id],
+    (err: Error, row: Application | Product | Farm | Farmer) => {
+      if (err) {
+        res.status(500).json({ error: err.message });
+        return;
+      }
+      if (!row) {
+        res.status(404).send({ error: `${table} with ID ${id} not found` });
+      } else {
+        let updateSql: string = `UPDATE ${table} SET `;
+        let queryParams: Array<string | number> = [];
+        for (const [key, value] of Object.entries(newDataField)) {
+          updateSql += key + `=?,`;
+          queryParams.push(value);
+        }
+        updateSql = updateSql.slice(0, -1);
+        updateSql += ` where id = ?`;
+        queryParams.push(id);
+        db.run(updateSql, queryParams, (err: Error) => {
+          if (err) {
+            res
+              .status(500)
+              .send({ error: `${table} with ID ${id} failed to update` });
+          } else {
+            res
+              .status(202)
+              .send({ message: `${table} has been modified in database` });
           }
         });
       }

@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
 import {
   addData,
+  alterData,
   deleteData,
   getAllData,
   getDataByID,
 } from "../services/data-access";
-import { Farm } from "../type";
+import { Farm, FormValues } from "../type";
 
 const TABLE_NAME: string = "farm";
 
@@ -29,4 +30,10 @@ export const addFarm = (req: Request, res: Response): void => {
 export const deleteFarm = (req: Request, res: Response): void => {
   const id: number = Number(req.query.id);
   deleteData(id, res, TABLE_NAME);
+};
+
+export const alterFarm = (req: Request, res: Response): void => {
+  const id: number = Number(req.query.id);
+  const newFarmFields: FormValues = req.body;
+  alterData(id, res, TABLE_NAME, newFarmFields);
 };
