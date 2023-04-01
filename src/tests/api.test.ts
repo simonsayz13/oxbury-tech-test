@@ -46,3 +46,15 @@ test("Test pagination metadata response from fetch all in product controller", a
     })
   );
 });
+
+test("Test data response from fetch all product by ID controller", async () => {
+  const response = await request(app).get("/product").query({ id: 1654847 });
+  expect(response.status).toBe(200);
+  expect(response.body).toEqual(
+    expect.objectContaining({
+      id: 1654847,
+      type: "savings",
+      name: "45 Day Notice Account",
+    })
+  );
+});
