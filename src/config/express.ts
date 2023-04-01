@@ -6,6 +6,9 @@ import {
   addFarm,
   addFarmer,
   addProduct,
+  deleteApplication,
+  deleteFarm,
+  deleteFarmer,
   deleteProduct,
   getAllApplications,
   getAllFarmers,
@@ -34,14 +37,17 @@ const createServer = (): express.Application => {
   app.get("/applications", getAllApplications);
   app.get("/application", getSelectedApplication);
   app.post("/application", addApplication);
+  app.delete("/application", deleteApplication);
 
   app.get("/farms", getAllFarms);
   app.get("/farm", getSelectedFarm);
   app.post("/farm", addFarm);
+  app.delete("/farm", deleteFarm);
 
   app.get("/farmers", getAllFarmers);
   app.get("/farmer", getSelectedFarmer);
   app.post("/farmer", addFarmer);
+  app.delete("/farmer", deleteFarmer);
 
   return app;
 };

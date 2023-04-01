@@ -1,5 +1,10 @@
 import { Request, Response } from "express";
-import { addData, getAllData, getDataByID } from "../services/data-access";
+import {
+  addData,
+  deleteData,
+  getAllData,
+  getDataByID,
+} from "../services/data-access";
 import { Farm } from "../type";
 
 const TABLE_NAME: string = "farm";
@@ -19,4 +24,9 @@ export const getSelectedFarm = (req: Request, res: Response): void => {
 export const addFarm = (req: Request, res: Response): void => {
   const newFarm: Farm = req.body;
   addData(newFarm, res, TABLE_NAME);
+};
+
+export const deleteFarm = (req: Request, res: Response): void => {
+  const id: number = Number(req.query.id);
+  deleteData(id, res, TABLE_NAME);
 };

@@ -74,7 +74,7 @@ test("Test response from add product controller", async () => {
   );
 });
 
-test("Test data response from fetch product by ID controller", async () => {
+test("Test response from delete product by ID controller", async () => {
   const response = await request(app).delete("/product").query({ id: 888 });
   expect(response.status).toBe(202);
   expect(response.body).toEqual(
