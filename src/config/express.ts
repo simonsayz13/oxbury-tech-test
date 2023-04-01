@@ -26,6 +26,7 @@ import {
   getSelectedFarmer,
   getSelectedProduct,
 } from "../controllers";
+import { rateLimiter } from "../middleware/rate-limiter";
 
 const createServer = (): express.Application => {
   const app = express();
@@ -33,6 +34,7 @@ const createServer = (): express.Application => {
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
   app.use(cors());
+  app.use(rateLimiter);
 
   app.get("/api", routeController);
 

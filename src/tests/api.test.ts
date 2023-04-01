@@ -151,3 +151,19 @@ test("Test response from select farmer's farm details controller", async () => {
     acres_farmed: 1700,
   });
 });
+
+test("should return 429 Too Many Requests when rate limit of 15 is exceeded", async () => {
+  const agent = request.agent(app); // create a supertest agent
+
+  // Make 5 requests to the endpoint plus the 10 tests before exceeding the limit of 15
+  for (let i = 0; i < 5; i++) {
+    await agent.get("/products").expect(200);
+  }
+
+  // Make one more request and expect a 429 response
+  const res = await agent.get("/products").expect(429);
+
+  // // Check that the response includes the rate limit headers
+  expect(res.get("RateLimit-Limit")).toBe("15");
+  expect(res.get("RateLimit-Remaining")).toBe("0");
+});
