@@ -81,3 +81,33 @@ export const addData = (
     }
   });
 };
+
+export const deleteData = (id: number, res: Response, table: string): void => {
+  let deleteSQL: string = `DELETE FROM ${table} WHERE id = ?`;
+  let selectSQL: string = `SELECT id FROM ${table} WHERE id = ?`;
+  db.get(
+    selectSQL,
+    [id],
+    (err: Error, row: [Application | Product | Farm | Farmer]) => {
+      if (err) {
+        res.status(500).json({ error: err.message });
+        return;
+      }
+      if (!row) {
+        res.status(404).send({ error: `${table} with ID ${id} not found` });
+      } else {
+        db.run(deleteSQL, [id], (err) => {
+          if (err) {
+            res
+              .status(500)
+              .send({ error: `Failed to delete ${table} with ID ${id}` });
+          } else {
+            res
+              .status(202)
+              .send({ message: `${table} has been deleted from database` });
+          }
+        });
+      }
+    }
+  );
+};
