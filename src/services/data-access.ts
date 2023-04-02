@@ -10,7 +10,6 @@ import {
   FilterFields,
 } from "../type";
 import { isEmpty } from "../util/data-service-util";
-import { count } from "console";
 
 export const getAllData = (
   table: string,
