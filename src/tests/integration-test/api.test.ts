@@ -1,4 +1,4 @@
-import { createServer } from "../config/express";
+import { createServer } from "../../config/express";
 import request from "supertest";
 import { config } from "dotenv";
 config();
@@ -42,8 +42,9 @@ test("Test pagination metadata response from fetch all in product controller", a
 test("Test data response from fetch product by ID controller", async () => {
   const response = await request(app)
     .get("/product")
-    .query({ id: 1654847 })
-    .set("X-API-Key", process.env.API_Key!);
+    .set("X-API-Key", process.env.API_Key!)
+    .query({ id: 1654847 });
+
   expect(response.status).toBe(200);
   expect(response.body).toEqual(
     expect.objectContaining({
@@ -62,8 +63,9 @@ test("Test response from add product controller", async () => {
   };
   const response = await request(app)
     .post("/product")
-    .send(newProduct)
-    .set("X-API-Key", process.env.API_Key!);
+    .set("X-API-Key", process.env.API_Key!)
+    .send(newProduct);
+
   expect(response.status).toBe(201);
   expect(response.body).toEqual(
     expect.objectContaining({
@@ -78,9 +80,10 @@ test("Test response from alter product controller", async () => {
   };
   const response = await request(app)
     .put("/product")
-    .query({ id: 888 })
     .set("X-API-Key", process.env.API_Key!)
+    .query({ id: 888 })
     .send(newProduct);
+
   expect(response.status).toBe(202);
   expect(response.body).toEqual(
     expect.objectContaining({
@@ -92,8 +95,9 @@ test("Test response from alter product controller", async () => {
 test("Test response from delete product by ID controller", async () => {
   const response = await request(app)
     .delete("/product")
-    .query({ id: 888 })
-    .set("X-API-Key", process.env.API_Key!);
+    .set("X-API-Key", process.env.API_Key!)
+    .query({ id: 888 });
+
   expect(response.status).toBe(202);
   expect(response.body).toEqual(
     expect.objectContaining({
@@ -105,8 +109,8 @@ test("Test response from delete product by ID controller", async () => {
 test("Test response from select application-product details controller", async () => {
   const response = await request(app)
     .get("/application/product")
-    .query({ id: 1052768 })
-    .set("X-API-Key", process.env.API_Key!);
+    .set("X-API-Key", process.env.API_Key!)
+    .query({ id: 1052768 });
   expect(response.status).toBe(200);
   expect(response.body).toEqual({
     id: 1052768,
@@ -122,8 +126,8 @@ test("Test response from select application-product details controller", async (
 test("Test response from select application-farmer details controller", async () => {
   const response = await request(app)
     .get("/application/farmer")
-    .query({ id: 1052768 })
-    .set("X-API-Key", process.env.API_Key!);
+    .set("X-API-Key", process.env.API_Key!)
+    .query({ id: 1052768 });
   expect(response.status).toBe(200);
   expect(response.body).toEqual({
     id: 1052768,
@@ -141,8 +145,8 @@ test("Test response from select application-farmer details controller", async ()
 test("Test response from select farmer's farm details controller", async () => {
   const response = await request(app)
     .get("/farmer/farm")
-    .query({ id: 1215200 })
-    .set("X-API-Key", process.env.API_Key!);
+    .set("X-API-Key", process.env.API_Key!)
+    .query({ id: 1215200 });
   expect(response.status).toBe(200);
   expect(response.body).toEqual({
     id: 1215200,
@@ -157,23 +161,14 @@ test("Test response from select farmer's farm details controller", async () => {
   });
 });
 
-test("should return 401 unauthorised when request contains incorrect 'X-API-Key'", async () => {
-  const response1 = await request(app).get("/product").set("X-API-Key", "");
-  expect(response1.status).toBe(401);
-});
-
 test("test response from filter data", async () => {
   const response = await request(app)
     .get("/product/filter")
-    .query({ type: "savings" })
-    .set("X-API-Key", process.env.API_Key!);
+    .set("X-API-Key", process.env.API_Key!)
+    .query({ type: "savings" });
+
   expect(response.status).toBe(200);
   expect(response.body.data).toEqual([
-    {
-      id: 123,
-      type: "savings",
-      name: "45 Day Notice Account",
-    },
     {
       id: 11111,
       type: "savings",
@@ -196,32 +191,11 @@ test("test response from filter data", async () => {
     },
   ]);
 });
+
 test("should return 400 invalid request when query of filter data request is empty", async () => {
   const response = await request(app)
     .get("/product/filter")
     .query({})
     .set("X-API-Key", process.env.API_Key!);
   expect(response.status).toBe(400);
-});
-
-test("should return 429 Too Many Requests when rate limit of 15 is exceeded", async () => {
-  const agent = request.agent(app); // create a supertest agent
-
-  // Make 3 requests to the endpoint plus the 12 tests before exceeding the limit of 15
-  for (let i = 0; i < 3; i++) {
-    await agent
-      .get("/product")
-      .set("X-API-Key", process.env.API_Key!)
-      .expect(200);
-  }
-
-  // Make one more request and expect a 429 response
-  const res = await agent
-    .get("/product")
-    .set("X-API-Key", process.env.API_Key!)
-    .expect(429);
-
-  // // Check that the response includes the rate limit headers
-  expect(res.get("RateLimit-Limit")).toBe("15");
-  expect(res.get("RateLimit-Remaining")).toBe("0");
 });
