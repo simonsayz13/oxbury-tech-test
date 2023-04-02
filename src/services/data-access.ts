@@ -10,6 +10,7 @@ import {
   FilterFields,
 } from "../type";
 import { isEmpty } from "../util/data-service-util";
+import { count } from "console";
 
 export const getAllData = (
   table: string,
@@ -185,17 +186,28 @@ export const filterData = (
       filterSql += key + `=? AND `;
       queryParams.push(value);
     }
-    queryParams.push(limit, offset);
     filterSql = filterSql.slice(0, -4) + `ORDER BY id LIMIT ? OFFSET ?`;
     db.all(
       filterSql,
-      queryParams,
+      [...queryParams, limit, offset],
       (err: Error, rows: [Application | Product | Farm | Farmer]) => {
-        const totalRecord: number = rows.length;
-        const totalPages: number = Math.ceil(totalRecord / limit);
         if (err) {
           res.status(500).send({ error: err.message });
-        } else {
+          return;
+        }
+
+        let countSql: string = `SELECT COUNT(*) AS count FROM ${table} WHERE `;
+        for (const [key] of Object.entries(filterFields)) {
+          countSql += key + `=? AND `;
+        }
+        countSql = countSql.slice(0, -4);
+        db.get(countSql, queryParams, (err: Error, rowCount: RowCount) => {
+          if (err) {
+            res.status(500).send({ error: err.message });
+            return;
+          }
+          const totalRecord: number = rowCount.count;
+          const totalPages: number = Math.ceil(totalRecord / limit);
           res.status(200).send({
             data: rows,
             metadata: {
@@ -205,7 +217,7 @@ export const filterData = (
               totalPages,
             },
           });
-        }
+        });
       }
     );
   } else {
