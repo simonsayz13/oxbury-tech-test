@@ -162,11 +162,46 @@ test("should return 401 unauthorised when request contains incorrect 'X-API-Key'
   expect(response1.status).toBe(401);
 });
 
+test("test response from filter data", async () => {
+  const response = await request(app)
+    .get("/products/filter")
+    .query({ type: "savings" })
+    .set("X-API-Key", process.env.API_Key!);
+  expect(response.status).toBe(200);
+  expect(response.body).toEqual([
+    {
+      id: 1654847,
+      type: "savings",
+      name: "45 Day Notice Account",
+    },
+    {
+      id: 1614351,
+      type: "savings",
+      name: "90 Day Notice Account",
+    },
+    {
+      id: 222222,
+      type: "savings",
+      name: "45 Day Notice Account",
+    },
+    {
+      id: 11111,
+      type: "savings",
+      name: "45 days notice account",
+    },
+    {
+      id: 123,
+      type: "savings",
+      name: "45 Day Notice Account",
+    },
+  ]);
+});
+
 test("should return 429 Too Many Requests when rate limit of 15 is exceeded", async () => {
   const agent = request.agent(app); // create a supertest agent
 
-  // Make 5 requests to the endpoint plus the 10 tests before exceeding the limit of 15
-  for (let i = 0; i < 5; i++) {
+  // Make 4 requests to the endpoint plus the 11 tests before exceeding the limit of 15
+  for (let i = 0; i < 4; i++) {
     await agent
       .get("/products")
       .set("X-API-Key", process.env.API_Key!)
