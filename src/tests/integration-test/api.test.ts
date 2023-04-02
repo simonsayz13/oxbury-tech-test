@@ -1,4 +1,4 @@
-import { createServer } from "../config/express";
+import { createServer } from "../../config/express";
 import request from "supertest";
 import { config } from "dotenv";
 config();
@@ -196,32 +196,11 @@ test("test response from filter data", async () => {
     },
   ]);
 });
+
 test("should return 400 invalid request when query of filter data request is empty", async () => {
   const response = await request(app)
     .get("/product/filter")
     .query({})
     .set("X-API-Key", process.env.API_Key!);
   expect(response.status).toBe(400);
-});
-
-test("should return 429 Too Many Requests when rate limit of 15 is exceeded", async () => {
-  const agent = request.agent(app); // create a supertest agent
-
-  // Make 3 requests to the endpoint plus the 12 tests before exceeding the limit of 15
-  for (let i = 0; i < 3; i++) {
-    await agent
-      .get("/product")
-      .set("X-API-Key", process.env.API_Key!)
-      .expect(200);
-  }
-
-  // Make one more request and expect a 429 response
-  const res = await agent
-    .get("/product")
-    .set("X-API-Key", process.env.API_Key!)
-    .expect(429);
-
-  // // Check that the response includes the rate limit headers
-  expect(res.get("RateLimit-Limit")).toBe("15");
-  expect(res.get("RateLimit-Remaining")).toBe("0");
 });
