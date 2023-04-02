@@ -7,6 +7,7 @@ import {
   Farmer,
   RowCount,
   FormValues,
+  FilterFields,
 } from "../type";
 
 export const getAllData = (
@@ -165,13 +166,13 @@ export const alterData = (
 export const filterData = (
   res: Response,
   table: string,
-  filterFields: any,
+  filterFields: FilterFields,
   tableColumns: Array<string>
 ): void => {
   let filterSql: string = `SELECT ${tableColumns.join(
     `,`
   )} FROM ${table} WHERE `;
-  let queryParams: Array<any> = [];
+  let queryParams: Array<string | number> = [];
   for (const [key, value] of Object.entries(filterFields)) {
     filterSql += key + `=? AND `;
     queryParams.push(value);
