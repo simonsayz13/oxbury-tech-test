@@ -8,7 +8,6 @@ import {
   getApplicationFarmerDetails,
   getApplicationProductDetails,
 } from "../controllers";
-import { apiKeyAuth } from "../middleware/authentication";
 
 const router = Router();
 

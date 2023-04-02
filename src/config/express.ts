@@ -1,37 +1,25 @@
 import express from "express";
 import cors from "cors";
 import {
-  addApplication,
   addFarm,
   addFarmer,
-  addProduct,
-  alterApplication,
   alterFarm,
   alterFarmer,
-  alterProduct,
-  deleteApplication,
   deleteFarm,
   deleteFarmer,
-  deleteProduct,
-  filterApplications,
   filterFarmers,
   filterFarms,
-  filterProducts,
-  getAllApplications,
   getAllFarmers,
   getAllFarms,
-  getAllProducts,
-  getApplicationFarmerDetails,
-  getApplicationProductDetails,
   getFarmDetails,
-  getSelectedApplication,
   getSelectedFarm,
   getSelectedFarmer,
-  getSelectedProduct,
 } from "../controllers";
 import { rateLimiter } from "../middleware/rate-limiter";
 import { apiKeyAuth } from "../middleware/authentication";
 import ApplicationRouter from "../routers/application";
+import ProductRouter from "../routers/product";
+
 const createServer = (): express.Application => {
   const app = express();
 
@@ -40,13 +28,7 @@ const createServer = (): express.Application => {
   app.use(cors());
   app.use(rateLimiter);
 
-  app.get("/products", apiKeyAuth, getAllProducts);
-  app.get("/product", apiKeyAuth, getSelectedProduct);
-  app.post("/product", apiKeyAuth, addProduct);
-  app.delete("/product", apiKeyAuth, deleteProduct);
-  app.put("/product", apiKeyAuth, alterProduct);
-  app.get("/product/filter", apiKeyAuth, filterProducts);
-
+  app.use("/product", apiKeyAuth, ProductRouter);
   app.use("/application", apiKeyAuth, ApplicationRouter);
 
   app.get("/farms", apiKeyAuth, getAllFarms);

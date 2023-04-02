@@ -6,7 +6,7 @@ const app = createServer();
 
 test("Test data response from fetch all in product controller", async () => {
   const response = await request(app)
-    .get("/products")
+    .get("/product")
     .set("X-API-Key", process.env.API_Key!);
   expect(response.status).toBe(200);
   expect(response.body).toEqual(
@@ -24,7 +24,7 @@ test("Test data response from fetch all in product controller", async () => {
 
 test("Test pagination metadata response from fetch all in product controller", async () => {
   const response = await request(app)
-    .get("/products")
+    .get("/product")
     .set("X-API-Key", process.env.API_Key!);
   expect(response.status).toBe(200);
   expect(response.body).toEqual(
@@ -158,7 +158,7 @@ test("Test response from select farmer's farm details controller", async () => {
 });
 
 test("should return 401 unauthorised when request contains incorrect 'X-API-Key'", async () => {
-  const response1 = await request(app).get("/products").set("X-API-Key", "");
+  const response1 = await request(app).get("/product").set("X-API-Key", "");
   expect(response1.status).toBe(401);
 });
 
@@ -210,14 +210,14 @@ test("should return 429 Too Many Requests when rate limit of 15 is exceeded", as
   // Make 3 requests to the endpoint plus the 12 tests before exceeding the limit of 15
   for (let i = 0; i < 3; i++) {
     await agent
-      .get("/products")
+      .get("/product")
       .set("X-API-Key", process.env.API_Key!)
       .expect(200);
   }
 
   // Make one more request and expect a 429 response
   const res = await agent
-    .get("/products")
+    .get("/product")
     .set("X-API-Key", process.env.API_Key!)
     .expect(429);
 
