@@ -12,16 +12,16 @@ import { FilterFields, FormValues, Product } from "../type";
 const TABLE_NAME: string = "product";
 const TABLE_COLUMNS: Array<string> = ["id", "type", "name"];
 
-export const getAllProducts = (req: Request, res: Response): void => {
-  const page: number = Number(req.query.page) || 1;
-  const limit: number = Number(req.query.limit) || 30;
-  const offset: number = (page - 1) * limit;
-  getAllData(TABLE_NAME, res, page, limit, offset, TABLE_COLUMNS);
-};
-
-export const getSelectedProduct = (req: Request, res: Response): void => {
-  const id: number = Number(req.query.id);
-  getDataByID(id, TABLE_NAME, res, TABLE_COLUMNS);
+export const getProduct = (req: Request, res: Response): void => {
+  if (typeof req.query.id !== "undefined") {
+    const id: number = Number(req.query.id);
+    getDataByID(id, TABLE_NAME, res, TABLE_COLUMNS);
+  } else {
+    const page: number = Number(req.query.page) || 1;
+    const limit: number = Number(req.query.limit) || 30;
+    const offset: number = (page - 1) * limit;
+    getAllData(TABLE_NAME, res, page, limit, offset, TABLE_COLUMNS);
+  }
 };
 
 export const addProduct = (req: Request, res: Response): void => {
