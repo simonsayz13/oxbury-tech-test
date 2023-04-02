@@ -39,6 +39,13 @@ Note: This API can be modified to suit any other data sources.
 - Description: This endpoint gets all application records from the database.
 - Parameters: None
 
+### GET `/application/filter`
+
+- Description: This endpoint retrieves all application record that matches the request query items in the database.
+- Parameters: filter criteria as request query, specified as part of the request query e.g. `{
+	"type": "flexi_credit"
+}`.
+
 ### GET `/application`
 
 - Description: This endpoint retrieves a specific application record in the database.
