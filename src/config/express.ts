@@ -31,6 +31,7 @@ import {
 } from "../controllers";
 import { rateLimiter } from "../middleware/rate-limiter";
 import { apiKeyAuth } from "../middleware/authentication";
+import ApplicationRouter from "../routers/application";
 const createServer = (): express.Application => {
   const app = express();
 
@@ -46,14 +47,7 @@ const createServer = (): express.Application => {
   app.put("/product", apiKeyAuth, alterProduct);
   app.get("/product/filter", apiKeyAuth, filterProducts);
 
-  app.get("/applications", apiKeyAuth, getAllApplications);
-  app.get("/application", apiKeyAuth, getSelectedApplication);
-  app.post("/application", apiKeyAuth, addApplication);
-  app.delete("/application", apiKeyAuth, deleteApplication);
-  app.put("/application", apiKeyAuth, alterApplication);
-  app.get("/application/product", apiKeyAuth, getApplicationProductDetails);
-  app.get("/application/farmer", apiKeyAuth, getApplicationFarmerDetails);
-  app.get("/application/filter", apiKeyAuth, filterApplications);
+  app.use("/application", ApplicationRouter);
 
   app.get("/farms", apiKeyAuth, getAllFarms);
   app.get("/farm", apiKeyAuth, getSelectedFarm);
