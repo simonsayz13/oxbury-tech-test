@@ -47,7 +47,7 @@ const createServer = (): express.Application => {
   app.put("/product", apiKeyAuth, alterProduct);
   app.get("/product/filter", apiKeyAuth, filterProducts);
 
-  app.use("/application", ApplicationRouter);
+  app.use("/application", apiKeyAuth, ApplicationRouter);
 
   app.get("/farms", apiKeyAuth, getAllFarms);
   app.get("/farm", apiKeyAuth, getSelectedFarm);

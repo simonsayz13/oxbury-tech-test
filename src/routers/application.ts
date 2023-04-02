@@ -12,12 +12,12 @@ import { apiKeyAuth } from "../middleware/authentication";
 
 const router = Router();
 
-router.get("/", apiKeyAuth, getApplication);
-router.post("/", apiKeyAuth, addApplication);
-router.delete("/", apiKeyAuth, deleteApplication);
-router.put("/", apiKeyAuth, alterApplication);
-router.get("/product", apiKeyAuth, getApplicationProductDetails);
-router.get("/farmer", apiKeyAuth, getApplicationFarmerDetails);
-router.get("/filter", apiKeyAuth, filterApplications);
+router.get("/", getApplication);
+router.post("/", addApplication);
+router.delete("/", deleteApplication);
+router.put("/", alterApplication);
+router.get("/product", getApplicationProductDetails);
+router.get("/farmer", getApplicationFarmerDetails);
+router.get("/filter", filterApplications);
 
 export default router;
