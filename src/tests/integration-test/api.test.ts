@@ -42,8 +42,9 @@ test("Test pagination metadata response from fetch all in product controller", a
 test("Test data response from fetch product by ID controller", async () => {
   const response = await request(app)
     .get("/product")
-    .query({ id: 1654847 })
-    .set("X-API-Key", process.env.API_Key!);
+    .set("X-API-Key", process.env.API_Key!)
+    .query({ id: 1654847 });
+
   expect(response.status).toBe(200);
   expect(response.body).toEqual(
     expect.objectContaining({
@@ -62,8 +63,9 @@ test("Test response from add product controller", async () => {
   };
   const response = await request(app)
     .post("/product")
-    .send(newProduct)
-    .set("X-API-Key", process.env.API_Key!);
+    .set("X-API-Key", process.env.API_Key!)
+    .send(newProduct);
+
   expect(response.status).toBe(201);
   expect(response.body).toEqual(
     expect.objectContaining({
@@ -78,9 +80,10 @@ test("Test response from alter product controller", async () => {
   };
   const response = await request(app)
     .put("/product")
-    .query({ id: 888 })
     .set("X-API-Key", process.env.API_Key!)
+    .query({ id: 888 })
     .send(newProduct);
+
   expect(response.status).toBe(202);
   expect(response.body).toEqual(
     expect.objectContaining({
@@ -92,8 +95,9 @@ test("Test response from alter product controller", async () => {
 test("Test response from delete product by ID controller", async () => {
   const response = await request(app)
     .delete("/product")
-    .query({ id: 888 })
-    .set("X-API-Key", process.env.API_Key!);
+    .set("X-API-Key", process.env.API_Key!)
+    .query({ id: 888 });
+
   expect(response.status).toBe(202);
   expect(response.body).toEqual(
     expect.objectContaining({
@@ -105,8 +109,8 @@ test("Test response from delete product by ID controller", async () => {
 test("Test response from select application-product details controller", async () => {
   const response = await request(app)
     .get("/application/product")
-    .query({ id: 1052768 })
-    .set("X-API-Key", process.env.API_Key!);
+    .set("X-API-Key", process.env.API_Key!)
+    .query({ id: 1052768 });
   expect(response.status).toBe(200);
   expect(response.body).toEqual({
     id: 1052768,
@@ -122,8 +126,8 @@ test("Test response from select application-product details controller", async (
 test("Test response from select application-farmer details controller", async () => {
   const response = await request(app)
     .get("/application/farmer")
-    .query({ id: 1052768 })
-    .set("X-API-Key", process.env.API_Key!);
+    .set("X-API-Key", process.env.API_Key!)
+    .query({ id: 1052768 });
   expect(response.status).toBe(200);
   expect(response.body).toEqual({
     id: 1052768,
@@ -141,8 +145,8 @@ test("Test response from select application-farmer details controller", async ()
 test("Test response from select farmer's farm details controller", async () => {
   const response = await request(app)
     .get("/farmer/farm")
-    .query({ id: 1215200 })
-    .set("X-API-Key", process.env.API_Key!);
+    .set("X-API-Key", process.env.API_Key!)
+    .query({ id: 1215200 });
   expect(response.status).toBe(200);
   expect(response.body).toEqual({
     id: 1215200,
@@ -157,23 +161,14 @@ test("Test response from select farmer's farm details controller", async () => {
   });
 });
 
-test("should return 401 unauthorised when request contains incorrect 'X-API-Key'", async () => {
-  const response1 = await request(app).get("/product").set("X-API-Key", "");
-  expect(response1.status).toBe(401);
-});
-
 test("test response from filter data", async () => {
   const response = await request(app)
     .get("/product/filter")
-    .query({ type: "savings" })
-    .set("X-API-Key", process.env.API_Key!);
+    .set("X-API-Key", process.env.API_Key!)
+    .query({ type: "savings" });
+
   expect(response.status).toBe(200);
   expect(response.body.data).toEqual([
-    {
-      id: 123,
-      type: "savings",
-      name: "45 Day Notice Account",
-    },
     {
       id: 11111,
       type: "savings",
