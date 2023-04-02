@@ -12,6 +12,7 @@ import {
   getApplicationFarmer,
   getApplicationProduct,
 } from "../services/application-details";
+import { DEFAULT_PAGE, DEFAULT_LIMIT } from "../config/constants";
 
 const TABLE_NAME: string = "application";
 const TABLE_COLUMNS: Array<string> = [
@@ -28,8 +29,8 @@ export const getApplication = (req: Request, res: Response): void => {
     const id: number = Number(req.query.id);
     getDataByID(id, TABLE_NAME, res, TABLE_COLUMNS);
   } else {
-    const page: number = Number(req.query.page) || 1;
-    const limit: number = Number(req.query.limit) || 30;
+    const page: number = Number(req.query.page) || DEFAULT_PAGE;
+    const limit: number = Number(req.query.limit) || DEFAULT_LIMIT;
     const offset: number = (page - 1) * limit;
     getAllData(TABLE_NAME, res, page, limit, offset, TABLE_COLUMNS);
   }
@@ -69,8 +70,8 @@ export const getApplicationFarmerDetails = (
 
 export const filterApplications = (req: Request, res: Response): void => {
   const filterFields: FilterFields = req.query as FilterFields;
-  const page: number = Number(req.query.page) || 1;
-  const limit: number = Number(req.query.limit) || 30;
+  const page: number = Number(req.query.page) || DEFAULT_PAGE;
+  const limit: number = Number(req.query.limit) || DEFAULT_LIMIT;
   const offset: number = (page - 1) * limit;
   filterData(res, TABLE_NAME, filterFields, TABLE_COLUMNS, page, limit, offset);
 };
