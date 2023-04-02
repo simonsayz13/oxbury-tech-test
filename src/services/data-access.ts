@@ -137,7 +137,7 @@ export const alterData = (
   table: string,
   newDataField: FormValues
 ): void => {
-  let selectSQL: string = `SELECT * FROM ${table} WHERE id = ?`;
+  let selectSQL: string = `SELECT id FROM ${table} WHERE id = ?`;
   db.get(
     selectSQL,
     [id],
