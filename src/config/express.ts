@@ -1,24 +1,19 @@
 import express from "express";
 import cors from "cors";
 import {
-  addFarm,
   addFarmer,
-  alterFarm,
   alterFarmer,
-  deleteFarm,
   deleteFarmer,
   filterFarmers,
-  filterFarms,
   getAllFarmers,
-  getAllFarms,
   getFarmDetails,
-  getSelectedFarm,
   getSelectedFarmer,
 } from "../controllers";
 import { rateLimiter } from "../middleware/rate-limiter";
 import { apiKeyAuth } from "../middleware/authentication";
 import ApplicationRouter from "../routers/application";
 import ProductRouter from "../routers/product";
+import FarmRouter from "../routers/farm";
 
 const createServer = (): express.Application => {
   const app = express();
@@ -30,13 +25,7 @@ const createServer = (): express.Application => {
 
   app.use("/product", apiKeyAuth, ProductRouter);
   app.use("/application", apiKeyAuth, ApplicationRouter);
-
-  app.get("/farms", apiKeyAuth, getAllFarms);
-  app.get("/farm", apiKeyAuth, getSelectedFarm);
-  app.post("/farm", apiKeyAuth, addFarm);
-  app.delete("/farm", apiKeyAuth, deleteFarm);
-  app.put("/farm", apiKeyAuth, alterFarm);
-  app.get("/farm/filter", apiKeyAuth, filterFarms);
+  app.use("/farm", apiKeyAuth, FarmRouter);
 
   app.get("/farmers", apiKeyAuth, getAllFarmers);
   app.get("/farmer", apiKeyAuth, getSelectedFarmer);
