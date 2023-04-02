@@ -196,12 +196,19 @@ test("test response from filter data", async () => {
     },
   ]);
 });
+test("should return 400 invalid request when query of filter data request is empty", async () => {
+  const response = await request(app)
+    .get("/product/filter")
+    .query({})
+    .set("X-API-Key", process.env.API_Key!);
+  expect(response.status).toBe(400);
+});
 
 test("should return 429 Too Many Requests when rate limit of 15 is exceeded", async () => {
   const agent = request.agent(app); // create a supertest agent
 
-  // Make 4 requests to the endpoint plus the 11 tests before exceeding the limit of 15
-  for (let i = 0; i < 4; i++) {
+  // Make 3 requests to the endpoint plus the 12 tests before exceeding the limit of 15
+  for (let i = 0; i < 3; i++) {
     await agent
       .get("/products")
       .set("X-API-Key", process.env.API_Key!)

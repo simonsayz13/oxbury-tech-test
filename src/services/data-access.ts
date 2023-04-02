@@ -9,6 +9,7 @@ import {
   FormValues,
   FilterFields,
 } from "../type";
+import { isEmpty } from "../util/data-service-util";
 
 export const getAllData = (
   table: string,
@@ -175,35 +176,39 @@ export const filterData = (
   limit: number,
   offset: number
 ): void => {
-  let filterSql: string = `SELECT ${tableColumns.join(
-    `,`
-  )} FROM ${table} WHERE `;
-  let queryParams: Array<string | number> = [];
-  for (const [key, value] of Object.entries(filterFields)) {
-    filterSql += key + `=? AND `;
-    queryParams.push(value);
-  }
-  queryParams.push(limit, offset);
-  filterSql = filterSql.slice(0, -4) + `ORDER BY id LIMIT ? OFFSET ?`;
-  db.all(
-    filterSql,
-    queryParams,
-    (err: Error, rows: [Application | Product | Farm | Farmer]) => {
-      const totalRecord: number = rows.length;
-      const totalPages: number = Math.ceil(totalRecord / limit);
-      if (err) {
-        res.status(500).send({ error: err.message });
-      } else {
-        res.status(200).send({
-          data: rows,
-          metadata: {
-            page,
-            limit,
-            totalRecord,
-            totalPages,
-          },
-        });
-      }
+  if (!isEmpty(filterFields)) {
+    let filterSql: string = `SELECT ${tableColumns.join(
+      `,`
+    )} FROM ${table} WHERE `;
+    let queryParams: Array<string | number> = [];
+    for (const [key, value] of Object.entries(filterFields)) {
+      filterSql += key + `=? AND `;
+      queryParams.push(value);
     }
-  );
+    queryParams.push(limit, offset);
+    filterSql = filterSql.slice(0, -4) + `ORDER BY id LIMIT ? OFFSET ?`;
+    db.all(
+      filterSql,
+      queryParams,
+      (err: Error, rows: [Application | Product | Farm | Farmer]) => {
+        const totalRecord: number = rows.length;
+        const totalPages: number = Math.ceil(totalRecord / limit);
+        if (err) {
+          res.status(500).send({ error: err.message });
+        } else {
+          res.status(200).send({
+            data: rows,
+            metadata: {
+              page,
+              limit,
+              totalRecord,
+              totalPages,
+            },
+          });
+        }
+      }
+    );
+  } else {
+    res.status(400).send({ error: `Invalid filter parameters` });
+  }
 };
