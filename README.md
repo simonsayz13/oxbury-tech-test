@@ -7,7 +7,7 @@ This is an implementation of a RESTful API that provides the following functiona
 - Ability to paginate response (default 30 items per page)
 - Ability to query data sets on their field values and linked field values (e.g. `farmer_id` in applications)
 - API Authentication using API Key
-- Rate Limiting (default 30 requests per minute)
+- Rate Limiting (default 15 requests every 15 minutes)
 - SQL injection protection
 
 # Tech Stack
@@ -20,6 +20,13 @@ This is an implementation of a RESTful API that provides the following functiona
 
 Note: This API can be modified to suit any other data sources.
 
+## Preparation
+
+Create a `.env` on the root of the project that contains the following environment variables:
+
+    PORT = <Hosting Port>
+    API_KEY = <API Key>
+
 ## Installation
 
     npm install
@@ -28,16 +35,16 @@ Note: This API can be modified to suit any other data sources.
 
     npm start
 
-## Run Tests
+## Running Tests
 
     npm test
 
 ## Example Endpoints
 
-### GET `/applications`
+### GET `/application`
 
-- Description: This endpoint gets all application records from the database.
-- Parameters: None
+- Description: This endpoint retrieves all application records from the database or retrieves a specific application record in the database if an id is provided as request query.
+- Parameters: None or the ID of the application, specified as part of the request query with a key of `id`.
 
 ### GET `/application/filter`
 
@@ -45,11 +52,6 @@ Note: This API can be modified to suit any other data sources.
 - Parameters: filter criteria as request query, specified as part of the request query e.g. `{
 	"type": "flexi_credit"
 }`.
-
-### GET `/application`
-
-- Description: This endpoint retrieves a specific application record in the database.
-- Parameters: The ID of the application, specified as part of the request query with a key of `id`.
 
 ### GET `/application/farmer`
 
@@ -104,6 +106,6 @@ To ensure the security of the application and the data it manages, it is crucial
 
 To prevent SQL injection attacks, this API implements various measures such as data type checking and using parameterised queries. By performing data type checking, the API can ensure that only valid data is being used, and any malicious data that could be used in a SQL injection attack is rejected. Additionally, parameterised queries ensure that SQL commands cannot be modified maliciously by attackers, as the SQL command is predefined and any user input is treated as a parameter rather than part of the SQL command. These measures work together to ensure that the API is secure and protected against SQL injection attacks.
 
-## Testing
+# Testing
 
-[Jest](https://jestjs.io/) and [Supertest](https://www.npmjs.com/package/supertest) frameworks were used to unit test all of the services of the API.
+[Jest](https://jestjs.io/) and [Supertest](https://www.npmjs.com/package/supertest) frameworks were used for integration test of the services of the API.
