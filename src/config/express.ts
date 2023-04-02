@@ -69,6 +69,7 @@ const createServer = (): express.Application => {
   app.put("/farmer", apiKeyAuth, alterFarmer);
   app.get("/farmer/farm", apiKeyAuth, getFarmDetails);
   app.get("/farmer/filter", apiKeyAuth, filterFarmers);
+
   return app;
 };
 

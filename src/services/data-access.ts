@@ -9,15 +9,19 @@ import {
   FormValues,
   FilterFields,
 } from "../type";
+import { isEmpty } from "../util/data-service-util";
 
 export const getAllData = (
   table: string,
   res: Response,
   page: number,
   limit: number,
-  offset: number
+  offset: number,
+  tableColumns: Array<string>
 ): void => {
-  const selectSql: string = `SELECT * FROM ${table} ORDER BY id LIMIT ? OFFSET ?`;
+  const selectSql: string = `SELECT ${tableColumns.join(
+    `,`
+  )} FROM ${table} ORDER BY id LIMIT ? OFFSET ?`;
   db.all(
     selectSql,
     [limit, offset],
@@ -48,8 +52,15 @@ export const getAllData = (
   );
 };
 
-export const getDataByID = (id: Number, table: string, res: Response): void => {
-  let selectSql: string = `SELECT * FROM ${table} WHERE id = ?`;
+export const getDataByID = (
+  id: Number,
+  table: string,
+  res: Response,
+  tableColumns: Array<string>
+): void => {
+  let selectSql: string = `SELECT ${tableColumns.join(
+    `,`
+  )} FROM ${table} WHERE id = ?`;
   db.get(
     selectSql,
     [id],
@@ -126,7 +137,7 @@ export const alterData = (
   table: string,
   newDataField: FormValues
 ): void => {
-  let selectSQL: string = `SELECT * FROM ${table} WHERE id = ?`;
+  let selectSQL: string = `SELECT id FROM ${table} WHERE id = ?`;
   db.get(
     selectSQL,
     [id],
@@ -172,35 +183,50 @@ export const filterData = (
   limit: number,
   offset: number
 ): void => {
-  let filterSql: string = `SELECT ${tableColumns.join(
-    `,`
-  )} FROM ${table} WHERE `;
-  let queryParams: Array<string | number> = [];
-  for (const [key, value] of Object.entries(filterFields)) {
-    filterSql += key + `=? AND `;
-    queryParams.push(value);
-  }
-  queryParams.push(limit, offset);
-  filterSql = filterSql.slice(0, -4) + `ORDER BY id LIMIT ? OFFSET ?`;
-  db.all(
-    filterSql,
-    queryParams,
-    (err: Error, rows: [Application | Product | Farm | Farmer]) => {
-      const totalRecord: number = rows.length;
-      const totalPages: number = Math.ceil(totalRecord / limit);
-      if (err) {
-        res.status(500).send({ error: err.message });
-      } else {
-        res.status(200).send({
-          data: rows,
-          metadata: {
-            page,
-            limit,
-            totalRecord,
-            totalPages,
-          },
+  if (!isEmpty(filterFields)) {
+    let filterSql: string = `SELECT ${tableColumns.join(
+      `,`
+    )} FROM ${table} WHERE `;
+    let queryParams: Array<string | number> = [];
+    for (const [key, value] of Object.entries(filterFields)) {
+      filterSql += key + `=? AND `;
+      queryParams.push(value);
+    }
+    filterSql = filterSql.slice(0, -4) + `ORDER BY id LIMIT ? OFFSET ?`;
+    db.all(
+      filterSql,
+      [...queryParams, limit, offset],
+      (err: Error, rows: [Application | Product | Farm | Farmer]) => {
+        if (err) {
+          res.status(500).send({ error: err.message });
+          return;
+        }
+
+        let countSql: string = `SELECT COUNT(*) AS count FROM ${table} WHERE `;
+        for (const [key] of Object.entries(filterFields)) {
+          countSql += key + `=? AND `;
+        }
+        countSql = countSql.slice(0, -4);
+        db.get(countSql, queryParams, (err: Error, rowCount: RowCount) => {
+          if (err) {
+            res.status(500).send({ error: err.message });
+            return;
+          }
+          const totalRecord: number = rowCount.count;
+          const totalPages: number = Math.ceil(totalRecord / limit);
+          res.status(200).send({
+            data: rows,
+            metadata: {
+              page,
+              limit,
+              totalRecord,
+              totalPages,
+            },
+          });
         });
       }
-    }
-  );
+    );
+  } else {
+    res.status(400).send({ error: `Invalid filter parameters` });
+  }
 };
