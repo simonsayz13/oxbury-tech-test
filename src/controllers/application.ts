@@ -32,7 +32,7 @@ export const getAllApplications = (req: Request, res: Response): void => {
 
 export const getSelectedApplication = (req: Request, res: Response): void => {
   const id: number = Number(req.query.id);
-  getDataByID(id, TABLE_NAME, res);
+  getDataByID(id, TABLE_NAME, res, TABLE_COLUMNS);
 };
 
 export const addApplication = (req: Request, res: Response): void => {

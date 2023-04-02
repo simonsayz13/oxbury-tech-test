@@ -28,7 +28,7 @@ export const getAllFarmers = (req: Request, res: Response): void => {
 
 export const getSelectedFarmer = (req: Request, res: Response): void => {
   const id: number = Number(req.query.id);
-  getDataByID(id, TABLE_NAME, res);
+  getDataByID(id, TABLE_NAME, res, TABLE_COLUMNS);
 };
 
 export const addFarmer = (req: Request, res: Response): void => {

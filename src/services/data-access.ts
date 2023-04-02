@@ -52,8 +52,15 @@ export const getAllData = (
   );
 };
 
-export const getDataByID = (id: Number, table: string, res: Response): void => {
-  let selectSql: string = `SELECT * FROM ${table} WHERE id = ?`;
+export const getDataByID = (
+  id: Number,
+  table: string,
+  res: Response,
+  tableColumns: Array<string>
+): void => {
+  let selectSql: string = `SELECT ${tableColumns.join(
+    `,`
+  )} FROM ${table} WHERE id = ?`;
   db.get(
     selectSql,
     [id],
