@@ -13,7 +13,10 @@ import {
   deleteFarm,
   deleteFarmer,
   deleteProduct,
-  filterProduct,
+  filterApplications,
+  filterFarmers,
+  filterFarms,
+  filterProducts,
   getAllApplications,
   getAllFarmers,
   getAllFarms,
@@ -41,7 +44,7 @@ const createServer = (): express.Application => {
   app.post("/product", apiKeyAuth, addProduct);
   app.delete("/product", apiKeyAuth, deleteProduct);
   app.put("/product", apiKeyAuth, alterProduct);
-  app.get("/products/filter", apiKeyAuth, filterProduct);
+  app.get("/product/filter", apiKeyAuth, filterProducts);
 
   app.get("/applications", apiKeyAuth, getAllApplications);
   app.get("/application", apiKeyAuth, getSelectedApplication);
@@ -50,12 +53,14 @@ const createServer = (): express.Application => {
   app.put("/application", apiKeyAuth, alterApplication);
   app.get("/application/product", apiKeyAuth, getApplicationProductDetails);
   app.get("/application/farmer", apiKeyAuth, getApplicationFarmerDetails);
+  app.get("/application/filter", apiKeyAuth, filterApplications);
 
   app.get("/farms", apiKeyAuth, getAllFarms);
   app.get("/farm", apiKeyAuth, getSelectedFarm);
   app.post("/farm", apiKeyAuth, addFarm);
   app.delete("/farm", apiKeyAuth, deleteFarm);
   app.put("/farm", apiKeyAuth, alterFarm);
+  app.get("/farm/filter", apiKeyAuth, filterFarms);
 
   app.get("/farmers", apiKeyAuth, getAllFarmers);
   app.get("/farmer", apiKeyAuth, getSelectedFarmer);
@@ -63,7 +68,7 @@ const createServer = (): express.Application => {
   app.delete("/farmer", apiKeyAuth, deleteFarmer);
   app.put("/farmer", apiKeyAuth, alterFarmer);
   app.get("/farmer/farm", apiKeyAuth, getFarmDetails);
-
+  app.get("/farmer/filter", apiKeyAuth, filterFarmers);
   return app;
 };
 

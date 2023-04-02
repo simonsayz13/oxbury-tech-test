@@ -3,16 +3,25 @@ import {
   addData,
   alterData,
   deleteData,
+  filterData,
   getAllData,
   getDataByID,
 } from "../services/data-access";
-import { Application, FormValues } from "../type";
+import { Application, FilterFields, FormValues } from "../type";
 import {
   getApplicationFarmer,
   getApplicationProduct,
 } from "../services/application-details";
 
 const TABLE_NAME: string = "application";
+const TABLE_COLUMNS: Array<string> = [
+  "id",
+  "type",
+  "amount_requested",
+  "status",
+  "product_id",
+  "farmer_id",
+];
 
 export const getAllApplications = (req: Request, res: Response): void => {
   const page: number = Number(req.query.page) || 1;
@@ -56,4 +65,9 @@ export const getApplicationFarmerDetails = (
 ): void => {
   const id: number = Number(req.query.id);
   getApplicationFarmer(id, res);
+};
+
+export const filterApplications = (req: Request, res: Response): void => {
+  const filterFields: FilterFields = req.query as FilterFields;
+  filterData(res, TABLE_NAME, filterFields, TABLE_COLUMNS);
 };

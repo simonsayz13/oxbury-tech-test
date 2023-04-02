@@ -40,7 +40,7 @@ export const alterProduct = (req: Request, res: Response): void => {
   alterData(id, res, TABLE_NAME, newProductFields);
 };
 
-export const filterProduct = (req: Request, res: Response): void => {
+export const filterProducts = (req: Request, res: Response): void => {
   const filterFields: FilterFields = req.query as FilterFields;
   filterData(res, TABLE_NAME, filterFields, TABLE_COLUMNS);
 };

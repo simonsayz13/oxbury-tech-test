@@ -164,7 +164,7 @@ test("should return 401 unauthorised when request contains incorrect 'X-API-Key'
 
 test("test response from filter data", async () => {
   const response = await request(app)
-    .get("/products/filter")
+    .get("/product/filter")
     .query({ type: "savings" })
     .set("X-API-Key", process.env.API_Key!);
   expect(response.status).toBe(200);

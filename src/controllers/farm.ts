@@ -3,12 +3,21 @@ import {
   addData,
   alterData,
   deleteData,
+  filterData,
   getAllData,
   getDataByID,
 } from "../services/data-access";
-import { Farm, FormValues } from "../type";
+import { Farm, FilterFields, FormValues } from "../type";
 
 const TABLE_NAME: string = "farm";
+const TABLE_COLUMNS: Array<string> = [
+  "id",
+  "name",
+  "num_cows",
+  "num_chickens",
+  "num_pigs",
+  "acres_farmed",
+];
 
 export const getAllFarms = (req: Request, res: Response): void => {
   const page: number = Number(req.query.page) || 1;
@@ -36,4 +45,9 @@ export const alterFarm = (req: Request, res: Response): void => {
   const id: number = Number(req.query.id);
   const newFarmFields: FormValues = req.body;
   alterData(id, res, TABLE_NAME, newFarmFields);
+};
+
+export const filterFarms = (req: Request, res: Response): void => {
+  const filterFields: FilterFields = req.query as FilterFields;
+  filterData(res, TABLE_NAME, filterFields, TABLE_COLUMNS);
 };
