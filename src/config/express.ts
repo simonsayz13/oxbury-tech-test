@@ -13,6 +13,7 @@ import {
   deleteFarm,
   deleteFarmer,
   deleteProduct,
+  filterProduct,
   getAllApplications,
   getAllFarmers,
   getAllFarms,
@@ -40,6 +41,7 @@ const createServer = (): express.Application => {
   app.post("/product", apiKeyAuth, addProduct);
   app.delete("/product", apiKeyAuth, deleteProduct);
   app.put("/product", apiKeyAuth, alterProduct);
+  app.get("/products/filter", apiKeyAuth, filterProduct);
 
   app.get("/applications", apiKeyAuth, getAllApplications);
   app.get("/application", apiKeyAuth, getSelectedApplication);

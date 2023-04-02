@@ -161,3 +161,31 @@ export const alterData = (
     }
   );
 };
+
+export const filterData = (
+  res: Response,
+  table: string,
+  filterFields: any,
+  tableColumns: Array<string>
+): void => {
+  let filterSql: string = `SELECT ${tableColumns.join(
+    `,`
+  )} FROM ${table} WHERE `;
+  let queryParams: Array<any> = [];
+  for (const [key, value] of Object.entries(filterFields)) {
+    filterSql += key + `=? AND `;
+    queryParams.push(value);
+  }
+  filterSql = filterSql.slice(0, -4);
+  db.all(
+    filterSql,
+    queryParams,
+    (err: Error, rows: [Application | Product | Farm | Farmer]) => {
+      if (err) {
+        res.status(500).send({ error: err.message });
+      } else {
+        res.status(200).send(rows);
+      }
+    }
+  );
+};

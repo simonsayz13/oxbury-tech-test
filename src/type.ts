@@ -35,3 +35,5 @@ export type RowCount = {
 };
 
 export type FormValues = { [key: string]: string | number };
+
+export type FilterFields = Record<string, string>;
