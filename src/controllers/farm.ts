@@ -49,5 +49,8 @@ export const alterFarm = (req: Request, res: Response): void => {
 
 export const filterFarms = (req: Request, res: Response): void => {
   const filterFields: FilterFields = req.query as FilterFields;
-  filterData(res, TABLE_NAME, filterFields, TABLE_COLUMNS);
+  const page: number = Number(req.query.page) || 1;
+  const limit: number = Number(req.query.limit) || 30;
+  const offset: number = (page - 1) * limit;
+  filterData(res, TABLE_NAME, filterFields, TABLE_COLUMNS, page, limit, offset);
 };

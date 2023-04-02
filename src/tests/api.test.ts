@@ -168,19 +168,9 @@ test("test response from filter data", async () => {
     .query({ type: "savings" })
     .set("X-API-Key", process.env.API_Key!);
   expect(response.status).toBe(200);
-  expect(response.body).toEqual([
+  expect(response.body.data).toEqual([
     {
-      id: 1654847,
-      type: "savings",
-      name: "45 Day Notice Account",
-    },
-    {
-      id: 1614351,
-      type: "savings",
-      name: "90 Day Notice Account",
-    },
-    {
-      id: 222222,
+      id: 123,
       type: "savings",
       name: "45 Day Notice Account",
     },
@@ -190,7 +180,17 @@ test("test response from filter data", async () => {
       name: "45 days notice account",
     },
     {
-      id: 123,
+      id: 222222,
+      type: "savings",
+      name: "45 Day Notice Account",
+    },
+    {
+      id: 1614351,
+      type: "savings",
+      name: "90 Day Notice Account",
+    },
+    {
+      id: 1654847,
       type: "savings",
       name: "45 Day Notice Account",
     },

@@ -167,7 +167,10 @@ export const filterData = (
   res: Response,
   table: string,
   filterFields: FilterFields,
-  tableColumns: Array<string>
+  tableColumns: Array<string>,
+  page: number,
+  limit: number,
+  offset: number
 ): void => {
   let filterSql: string = `SELECT ${tableColumns.join(
     `,`
@@ -177,15 +180,26 @@ export const filterData = (
     filterSql += key + `=? AND `;
     queryParams.push(value);
   }
-  filterSql = filterSql.slice(0, -4);
+  queryParams.push(limit, offset);
+  filterSql = filterSql.slice(0, -4) + `ORDER BY id LIMIT ? OFFSET ?`;
   db.all(
     filterSql,
     queryParams,
     (err: Error, rows: [Application | Product | Farm | Farmer]) => {
+      const totalRecord: number = rows.length;
+      const totalPages: number = Math.ceil(totalRecord / limit);
       if (err) {
         res.status(500).send({ error: err.message });
       } else {
-        res.status(200).send(rows);
+        res.status(200).send({
+          data: rows,
+          metadata: {
+            page,
+            limit,
+            totalRecord,
+            totalPages,
+          },
+        });
       }
     }
   );
