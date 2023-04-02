@@ -23,7 +23,7 @@ export const getAllFarmers = (req: Request, res: Response): void => {
   const page: number = Number(req.query.page) || 1;
   const limit: number = Number(req.query.limit) || 30;
   const offset: number = (page - 1) * limit;
-  getAllData(TABLE_NAME, res, page, limit, offset);
+  getAllData(TABLE_NAME, res, page, limit, offset, TABLE_COLUMNS);
 };
 
 export const getSelectedFarmer = (req: Request, res: Response): void => {

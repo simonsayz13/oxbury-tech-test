@@ -15,9 +15,12 @@ export const getAllData = (
   res: Response,
   page: number,
   limit: number,
-  offset: number
+  offset: number,
+  tableColumns: Array<string>
 ): void => {
-  const selectSql: string = `SELECT * FROM ${table} ORDER BY id LIMIT ? OFFSET ?`;
+  const selectSql: string = `SELECT ${tableColumns.join(
+    `,`
+  )} FROM ${table} ORDER BY id LIMIT ? OFFSET ?`;
   db.all(
     selectSql,
     [limit, offset],
